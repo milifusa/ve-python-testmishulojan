@@ -45,8 +45,34 @@ as well.
 
 
 def stat(s):
-    """ Your solution here """
-    return 'Range: {} Average: {} Median: {}'
+    if not s:
+        return ''
+    
+    # Helper function to convert time string 'h|m|s' to total seconds
+    def to_seconds(time):
+        h, m, s = map(int, time.split('|'))
+        return h * 3600 + m * 60 + s
+    
+    # Helper function to convert total seconds to 'hh|mm|ss' format
+    def to_hms(seconds):
+        h = seconds // 3600
+        m = (seconds % 3600) // 60
+        s = seconds % 60
+        return f"{h:02}|{m:02}|{s:02}"
+    
+    # Parse the times and convert them to seconds
+    times = list(map(to_seconds, s.split(', ')))
+    
+    # Sort the times in ascending order
+    times.sort()
+    
+    # Calculate range, average, and median
+    range_time = times[-1] - times[0]
+    average_time = sum(times) // len(times)
+    median_time = (times[len(times) // 2] if len(times) % 2 != 0 
+                   else (times[len(times) // 2 - 1] + times[len(times) // 2]) // 2)
+    
+    return f"Range: {to_hms(range_time)} Average: {to_hms(average_time)} Median: {to_hms(median_time)}"
 
 
 # Test cases
